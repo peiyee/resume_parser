@@ -3,23 +3,40 @@
 <head>
 	<title>Resume Parser</title>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mithril/0.2.3/mithril.min.js"></script>
+
 </head>
 <body>
 	<h1>resume
 </h1>
-<form enctype="multipart/form-data" method="post">
+<!-- <form enctype="multipart/form-data" method="post">
   <fieldset>
     <legend>Upload Your Resume</legend>
      <input type="file" id="upload_file" accept=".json"></input>
      <input type="button" id="load_file" value="load"></input>
   </fieldset>
-</form>
-</body>
-</html>
-
+</form> -->
+<div id="resume-table">
+ 
+</div>
 <script type="text/javascript">
-$(document).ready(function(){
-  $("#load_file").on('click', function(){
+
+function magic(name){
+ return function(){
+  return m.apply(null,[name,...arguments])
+ }
+};
+var tr = magic('tr')
+var td = magic('td')
+
+
+Table={
+  controller:function(){
+  var ctrl = {};
+
+  ctrl.resume = {};
+  
+  ctrl.onclick = function(){
     var file, fr,resume;
     if (typeof window.FileReader !== 'function') {
       alert("The file API isn't supported on this browser yet.");
@@ -27,16 +44,91 @@ $(document).ready(function(){
     }
     
     file = document.getElementById("upload_file").files[0];
-      fr = new FileReader();
-      fr.onload = receivedText;
-      fr.readAsText(file);
-      console.log(fr);
-    function receivedText(e) {
-      lines = e.target.result;
-      resume = JSON.parse(lines); 
-     
-    }
-  });
+    fr = new FileReader();
+    fr.onload = receivedText;
+    fr.readAsText(file);
 
-});
+    console.log(file,fr);
+      
+    function receivedText(e) {
+      m.startComputation();
+
+      lines = e.target.result;
+      resume = JSON.parse(lines);
+      
+      ctrl.resume = resume;
+
+      m.endComputation();
+    }
+  };
+
+  return ctrl;
+
+
+  },
+  view:function(ctrl){
+    var resume = ctrl.resume;
+    if (resume)
+      return m('div', form(), table());
+    return m('div', form());
+
+    function form(){
+      return m('form', {enctype:"multipart/form-data", method:"post"},
+        m('fieldset', [
+          m('legend', 'Upload Your Resume'),
+          m('input', {type:'file', accept:'.json', id: 'upload_file'}),
+          m('input', {type:'button', value: 'load', onclick: ctrl.onclick}),
+        ])
+      )
+    }
+
+    function table(){
+      if(!resume||!resume.contact_info)
+        return '';
+
+      return m('table',
+        tr(td('Contact Info')),
+        tr(td("Name: "),td([resume.contact_info.name])),
+        tr(td('Phone: '),td([resume.contact_info.phone])),
+        tr(td('Email: '),td([resume.contact_info.email])),
+        tr(td('Address: '),td(formatAddress(resume.contact_info.address))),
+        tr(td('Github Account: '),td([resume.contact_info.github])),
+        tr(td('LinkedIn Account: '),td([resume.contact_info.linkedIn])),
+        tr(td('Summary')),
+        tr(td({colspan:"2"},resume.summary)),
+        tr(td('Experience')),
+        resume.experience.map(experienceRow),
+        tr('Education'),
+        resume.education.map(educationRow),
+        tr('Additional Skill'),
+        resume.additional_skill ? resume.additional_skill.map(additionalSkillRow) : ""
+        );
+    }
+    function additionalSkillRow(entry,index){
+      return tr(td(entry))
+    }
+    function experienceRow(entry,index){
+       return [tr(td('Title'),td(entry.title)),
+        tr(td('Company'),td(entry.company)),
+        tr(td('Start Date'),td(entry.start_date)),
+        tr([td('End Date'),td(entry.end_date)])]
+      }
+    function educationRow(entry,index){
+      return [tr(td('School'),td(entry.title)),
+              tr(td('GPA'),td(entry.company)),
+              tr(td('Start Date'),td(entry.start_date)),
+              tr(td('End Date'),td(entry.end_date)),
+              tr(td('Major'),td(entry.major))]
+    }
+   
+    function formatAddress(address){
+      return address.street + ' ' + address.postcode + ' ' + address.city + ' ' + address.state + ' ' + address.country
+    }
+  }
+}
+
+m.mount(document.getElementById('resume-table'),Table);
 </script>
+</body>
+</html>
+
