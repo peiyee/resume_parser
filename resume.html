@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8"/>
 	<title>Resume Parser</title>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mithril/0.2.3/mithril.min.js"></script>
-
+  <link rel="stylesheet" type="text/css" href="css/application.css">
 </head>
 <body>
-	<h1>resume
-</h1>
+	<h1>resume</h1>
+  <span>
+    <div>teh</div>
+    <div>pei</div>
+  </span>
 <!-- <form enctype="multipart/form-data" method="post">
   <fieldset>
     <legend>Upload Your Resume</legend>
@@ -21,20 +25,30 @@
 </div>
 <script type="text/javascript">
 
-function magic(name){
+function createElement(name){
  return function(){
   return m.apply(null,[name,...arguments])
  }
 };
-var tr = magic('tr')
-var td = magic('td')
-
-
+function createElementWithClass(name,klass){
+ return function(){
+  console.log(name)
+  console.log(arguments)
+ 
+  return m.apply(null,[name,klass,...arguments])
+ }
+};
+var tr = createElement('tr')
+var td = createElement('td')
+var div = createElement('div')
+var hr = createElement('hr')
+var divTitle = createElementWithClass('div',{class:"title"})
+var h2NoMargin = createElementWithClass('h2',{class:"title"})
 Table={
   controller:function(){
   var ctrl = {};
 
-  ctrl.resume = {};
+  ctrl.resume = null;
   
   ctrl.onclick = function(){
     var file, fr,resume;
@@ -68,8 +82,9 @@ Table={
   },
   view:function(ctrl){
     var resume = ctrl.resume;
+    console.log(Boolean(resume))
     if (resume)
-      return m('div', form(), table());
+      return m('div', form(),table());
     return m('div', form());
 
     function form(){
@@ -83,42 +98,80 @@ Table={
     }
 
     function table(){
-      if(!resume||!resume.contact_info)
-        return '';
 
-      return m('table',
-        tr(td('Contact Info')),
-        tr(td("Name: "),td([resume.contact_info.name])),
-        tr(td('Phone: '),td([resume.contact_info.phone])),
-        tr(td('Email: '),td([resume.contact_info.email])),
-        tr(td('Address: '),td(formatAddress(resume.contact_info.address))),
-        tr(td('Github Account: '),td([resume.contact_info.github])),
-        tr(td('LinkedIn Account: '),td([resume.contact_info.linkedIn])),
-        tr(td('Summary')),
-        tr(td({colspan:"2"},resume.summary)),
-        tr(td('Experience')),
-        resume.experience.map(experienceRow),
-        tr('Education'),
-        resume.education.map(educationRow),
-        tr('Additional Skill'),
-        resume.additional_skill ? resume.additional_skill.map(additionalSkillRow) : ""
-        );
+      return [
+      div(
+        h2NoMargin('Contact Info'),
+        hr(),
+        div('Name:'),
+        div(resume.contact_info.name)),
+     
+      div(
+        h2NoMargin('Summary'),
+        hr(),
+        div(resume.summary)),
+      
+      div(
+        h2NoMargin('Working Experience'),
+        hr(),
+        resume.experience ? resume.experience.map(experienceRow) : ""),
+      
+      div(
+        h2NoMargin('Education'),
+        hr(),
+        resume.education ? resume.education.map(educationRow) : ""),
+      
+      div(
+        h2NoMargin('Additional Skill'),
+        hr(),
+        resume.additional_skill.map(additionalSkillRow))
+      ];
+      // return m('table',
+      //   tr(td('Contact Info')),
+      //   tr(td("Name: "),td([resume.contact_info.name])),
+      //   tr(td('Phone: '),td([resume.contact_info.phone])),
+      //   tr(td('Email: '),td([resume.contact_info.email])),
+      //   tr(td('Address: '),td(formatAddress(resume.contact_info.address))),
+      //   tr(td('Github Account: '),td([resume.contact_info.github])),
+      //   tr(td('LinkedIn Account: '),td([resume.contact_info.linkedIn])),
+      //   tr(td('Summary')),
+      //   tr(td({colspan:"2"},resume.summary)),
+      //   tr(td('Experience')),
+      //   resume.experience ? resume.experience.map(experienceRow) : "",
+      //   tr('Education'),
+      //   resume.education ? resume.education.map(educationRow) : "",
+      //   tr('Additional Skill'),
+      //   resume.additional_skill ? resume.additional_skill.map(additionalSkillRow) : ""
+      //   );
     }
     function additionalSkillRow(entry,index){
-      return tr(td(entry))
+      return div(entry)
     }
     function experienceRow(entry,index){
-       return [tr(td('Title'),td(entry.title)),
-        tr(td('Company'),td(entry.company)),
-        tr(td('Start Date'),td(entry.start_date)),
-        tr([td('End Date'),td(entry.end_date)])]
+       return [
+                div('Title:'),
+                div(entry.title),
+                div('Company:'),
+                div(entry.company),
+                div('Start Date:'),
+                div(entry.start_date),
+                div('End Date:'),
+                div(entry.end_date)
+              ]
       }
     function educationRow(entry,index){
-      return [tr(td('School'),td(entry.title)),
-              tr(td('GPA'),td(entry.company)),
-              tr(td('Start Date'),td(entry.start_date)),
-              tr(td('End Date'),td(entry.end_date)),
-              tr(td('Major'),td(entry.major))]
+      return [
+              div('School:'),
+              div(entry.title),
+              div('GPA:'),
+              div(entry.company),
+              div('Start Date:'),
+              div(entry.start_date),
+              div('End Date:'),
+              div(entry.end_date),
+              div('Major:'),
+              div(entry.major)
+            ]
     }
    
     function formatAddress(address){
