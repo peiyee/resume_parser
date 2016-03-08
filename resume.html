@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Resume Parser</title>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+</head>
+<body>
+	<h1>resume
+</h1>
+<form enctype="multipart/form-data" method="post">
+  <fieldset>
+    <legend>Upload Your Resume</legend>
+     <input type="file" id="upload_file" accept=".json"></input>
+     <input type="button" id="load_file" value="load"></input>
+  </fieldset>
+</form>
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#load_file").on('click', function(){
+    var file, fr,resume;
+    if (typeof window.FileReader !== 'function') {
+      alert("The file API isn't supported on this browser yet.");
+      return;
+    }
+    
+    file = document.getElementById("upload_file").files[0];
+      fr = new FileReader();
+      fr.onload = receivedText;
+      fr.readAsText(file);
+      console.log(fr);
+    function receivedText(e) {
+      lines = e.target.result;
+      resume = JSON.parse(lines); 
+     
+    }
+  });
+
+});
+</script>
