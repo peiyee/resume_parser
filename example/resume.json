@@ -1,0 +1,54 @@
+{
+  "contact_info": {
+    "name": "Jon Snow",
+    "address": {
+      "street": "",
+      "postcode": "",
+      "city": "The wall",
+      "state": "Winterfell",
+      "country": "Seven Kingdoms"
+    },
+    "phone": "0111234567",
+    "email": "jonsnow@olly.com",
+    "github": "https://github.com/jonsnow",
+    "linkedIn": "https://my.linkedin.com/in/jonsnow"
+  },
+  "summary": "After the Battle of Castle Black, the defense of which he helped lead, Jon is narrowly elected the 998th Lord Commander of the Night's Watch. As Lord Commander, Jon supports a controversial alliance between the Night's Watch and the Free Folk to fight against the White Walkers, and with his wildling ally, Tormund, he travels to Hardhome, where most of the Free Folk are massacred by the White Walkers and only a few thousand manage to escape with Jon. In that battle, Jon becomes the second black brother to kill a White Walker, in the process discovering their vulnerability to Valyrian steel.",
+  "experience": [
+    {
+      "title": "Lord Commander of the Night's Watch",
+      "company": "Seven Kingdoms",
+      "start_date": "302 AL",
+      "end_date": "",
+      "description": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "title": "Night's Watch",
+      "company": "Seven Kingdoms",
+      "start_date": "298 AL",
+      "end_date": "302 AL",
+      "description": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "",
+      "gpa": "",
+      "start_date": "",
+      "end_date": "",
+      "major": ""
+    }
+  ],
+  "additional_skill": [
+    "Play guitar",
+    "Play football"
+  ]
+}
