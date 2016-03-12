@@ -117,7 +117,7 @@ Table={
       }
     function educationRow(entry,index){
       return [
-              div('School:'+entry.title),
+              div('School:'+entry.school),
               div('GPA:'+entry.gpa),
               div('Start Date:'+entry.start_date),
               div('End Date:'+entry.end_date),
