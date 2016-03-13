@@ -5,15 +5,15 @@ function createElement(name){
 };
 function createElementWithClass(name,klass){
  return function(){
-  return m.apply(null,[name,klass,...arguments])
+  return m.apply(null,[name,{class: klass},...arguments])
  }
 };
 var tr = createElement('tr')
 var td = createElement('td')
 var div = createElement('div')
 var hr = createElement('hr')
-var divTitle = createElementWithClass('div',{class:"title"})
-var h2NoMargin = createElementWithClass('h2',{class:"title"})
+var divTitle = createElementWithClass('div',"title")
+var h2NoMargin = createElementWithClass('h2',"title")
 Table={
   controller:function(){
   var ctrl = {};
